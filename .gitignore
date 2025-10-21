@@ -41,6 +41,6 @@ __pycache__/
 # npm
 npm/
 
-# docker bind-mount
+# docker bind-mount & env variables
 /dbs/
-
+docker.env

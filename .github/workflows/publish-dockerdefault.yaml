@@ -2,8 +2,8 @@ name: Build and Publish Docker Image to GitHub Packages
 
 # This workflow is run on any push to main, or on push tag when it starts with a 'v'
 on:
-  push: 
-    branches: 
+  push:
+    branches:
       - main
     tags:
       - 'v*'
@@ -51,7 +51,7 @@ jobs:
             # leave this on
             type=ref,event=branch
 
-      # The github 'docker/bake-action' runs into a registry error... 
+      # The github 'docker/bake-action' runs into a registry error...
       # Using https://github.com/docker/build-push-action
       - name: Build & push image with Github Action
         uses: docker/build-push-action@v6
@@ -63,5 +63,5 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           pull: true
-          build-args: 
-            DB_NAME=haxall
+          build-args:
+            HAXALL_DB_NAME=haxall
