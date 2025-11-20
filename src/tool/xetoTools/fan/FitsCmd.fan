@@ -192,15 +192,34 @@ internal class FitsCmd : XetoCmd
 ** FitsCmdContext
 **************************************************************************
 
-internal class FitsCmdContext : XetoContext
+internal class FitsCmdContext : HaystackContext
 {
   new make(FitsCmd cmd) { this.cmd = cmd }
 
   override xeto::Dict? xetoReadById(Obj id)  { cmd.recsById.get(id) }
 
-  override Obj? xetoReadAllEachWhile(Str filter, |xeto::Dict->Obj?| f)  { throw Err() }
+  override Obj? xetoReadAllEachWhile(Str filter, |xeto::Dict->Obj?| f)
+  {
+    result := null
+    cmd.recs.eachWhile |rec|
+    {
+      if (Filter(filter).matches(rec, this))
+      {
+        result = f(rec)
+        return result
+      }
+      return null
+    }
+    return result
+  }
 
   override Bool xetoIsSpec(Str spec, xeto::Dict rec) { throw Err() }
+
+  override xeto::Dict? deref(Ref id) { cmd.recsById.get(id) }
+
+  override FilterInference inference() { FilterInference.nil }
+
+  override xeto::Dict toDict() { Etc.dict0 }
 
   FitsCmd cmd
 }
